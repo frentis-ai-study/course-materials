@@ -1,0 +1,9 @@
+$ curl "http://localhost:8081/chat?message=인공지능이 뭔지 한 줄로 설명해줘"
+
+인공지능(AI)은 인간의 학습, 추론, 판단 능력을 컴퓨터로 구현하여 스스로 문제를 해결하는 기술입니다.
+
+---
+
+$ curl "http://localhost:8081/chat?message=Spring AI가 뭐야?"
+
+Spring AI는 Spring Boot 생태계에서 다양한 AI 모델(OpenAI, Ollama, Anthropic 등)을 통일된 API로 호출할 수 있게 해주는 프레임워크입니다. Java 개발자가 기존 코드에 AI 기능을 쉽게 추가할 수 있습니다.

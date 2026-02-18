@@ -1,0 +1,44 @@
+# ──────────────────────────────────────────────
+# 옵션 A: 호스트에 Ollama가 이미 실행 중인 경우 (권장)
+#   docker compose up -d openwebui
+#
+# 옵션 B: Ollama도 컨테이너로 실행
+#   docker compose up -d
+#   docker exec ollama ollama pull qwen3:8b
+# ──────────────────────────────────────────────
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    profiles:
+      - with-ollama
+    # GPU 사용 시 아래 주석 해제
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    ports:
+      - "3000:8080"
+    environment:
+      # 호스트 Ollama 사용 시 host.docker.internal, 컨테이너 Ollama 사용 시 ollama
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - WEBUI_AUTH=true
+      - WEBUI_SECRET_KEY=demo-secret-key-change-in-production
+    volumes:
+      - openwebui-data:/app/backend/data
+
+volumes:
+  ollama-data:
+  openwebui-data:

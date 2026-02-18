@@ -1,0 +1,16 @@
+# Spring AI + Ollama 설정
+# 모델을 바꾸려면 아래 model 값만 변경하면 됩니다
+
+server:
+  port: 8081
+
+spring:
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: qwen3:8b
+          # 다른 모델로 바꾸려면:
+          # model: gemma3:12b
+          # model: deepseek-r1:8b
