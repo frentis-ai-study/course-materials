@@ -6,21 +6,54 @@
 
 "Java 코드 몇 줄로 AI 챗봇 — 모델을 바꿔도 코드는 그대로, 설정 1줄만 변경"
 
-## 사전 요구사항
-
-- Java 21+ 설치
-- Maven 설치
-- Ollama 설치 및 실행 중 (`ollama serve`)
-- 모델 2개 다운로드 완료
+## 사전 체크리스트
 
 ```bash
-# 사전 준비 (시연 전 완료)
+# 1. Java 21+ 확인
+java -version
+# → openjdk version "21.x.x" 이상이어야 함
+# 미설치 시: brew install openjdk@21
+
+# 2. Ollama 실행 확인
+curl -s http://localhost:11434/api/tags | head -1
+# → {"models":[...]} 응답이 와야 함
+# 미실행 시: ollama serve
+
+# 3. 모델 다운로드 확인
+ollama list | grep -E "qwen3:8b|gemma3:12b"
+# → 두 모델 모두 보여야 함
+# 미다운로드 시:
 ollama pull qwen3:8b
 ollama pull gemma3:12b
 
-# Maven 의존성 미리 다운로드 (시연 중 대기 방지)
+# 4. 포트 충돌 확인
+lsof -i :8081 | grep LISTEN
+# → 아무것도 안 나와야 함 (사용 중이면 해당 프로세스 종료)
+
+# 5. Maven 의존성 사전 다운로드 (첫 실행 시 3~5분 소요)
 cd src/spring-ai-chat
 ./mvnw dependency:resolve
+# → BUILD SUCCESS 확인
+
+# 6. 빌드 테스트
+./mvnw compile
+# → BUILD SUCCESS 확인
+```
+
+## 주요 파일 경로
+
+```
+src/spring-ai-chat/
+├── src/main/java/com/frentis/demo/
+│   ├── ChatController.java          ← 핵심 코드 (4줄)
+│   └── SpringAiChatApplication.java
+├── src/main/resources/
+│   └── application.yml              ← 모델 설정 (여기서 모델명 변경)
+├── src/test/java/com/frentis/demo/
+│   ├── SpringAiChatApplicationTests.java  ← 단위 테스트
+│   └── ChatIntegrationTest.java           ← 통합 테스트 (Ollama 필요)
+├── pom.xml
+└── mvnw / mvnw.cmd
 ```
 
 ## 시연 순서
@@ -104,6 +137,21 @@ curl -G "http://localhost:8081/chat" --data-urlencode "message=인공지능이 �
 - "모델 교체는 설정 1줄 — 코드 변경 없음"
 - "기존 Spring Boot 프로젝트에 의존성 하나 추가하면 AI가 됩니다"
 - "교육과정에서 여기서부터 RAG, Tool Calling, MCP Agent까지 확장합니다"
+
+## 테스트 실행
+
+```bash
+cd src/spring-ai-chat
+
+# 단위 테스트 (Ollama 없이도 통과)
+./mvnw test
+# → Tests run: 4, Failures: 0 (통합 2개는 Skipped)
+
+# 통합 테스트 (Ollama 실행 중일 때)
+OLLAMA_AVAILABLE=true ./mvnw test
+# → Tests run: 4, Failures: 0, Skipped: 0
+# → 약 25초 소요 (Ollama 응답 생성 시간 포함)
+```
 
 ## 백업 플랜
 

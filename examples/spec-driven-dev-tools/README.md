@@ -6,11 +6,27 @@
 
 "코드 전에 명세를 먼저 — AI가 실행하기 전에 인간이 방향을 정한다"
 
-## 사전 요구사항
+## 사전 체크리스트
 
-- Claude Code 설치 (터미널에서 `claude` 실행 가능)
-- OpenSpec 설치: `claude install-extension fission-ai/openspec`
-- 샘플 프로젝트 디렉토리 준비 (아무 코드 프로젝트)
+```bash
+# 1. Claude Code 설치 확인
+claude --version
+# → claude-code x.x.x 이상
+# 미설치 시: npm install -g @anthropic-ai/claude-code
+
+# 2. OpenSpec 확장 설치 확인
+claude extensions list 2>/dev/null || echo "extensions 명령 확인"
+# OpenSpec이 설치되어 있어야 함
+# 미설치 시: claude install-extension fission-ai/openspec
+
+# 3. 샘플 프로젝트 디렉토리 준비
+# 아무 코드 프로젝트면 됨 (Git 저장소 권장)
+# 예: Spring AI 데모 프로젝트 등
+
+# 4. Anthropic API 키 확인 (Claude Code 동작에 필요)
+echo $ANTHROPIC_API_KEY | head -c 10
+# → sk-ant-api 로 시작해야 함
+```
 
 ## 시연 순서
 

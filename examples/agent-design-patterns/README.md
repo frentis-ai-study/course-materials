@@ -41,15 +41,46 @@
      └─────────────┘
 ```
 
-## 사전 요구사항
-
-- Python 3.11+
-- uv 설치
-- Ollama 실행 중 + qwen3:8b 모델
+## 사전 체크리스트
 
 ```bash
-# 사전 준비
-ollama pull qwen3:8b
+# 1. Python 버전 확인 (3.11 이상, 3.14 미만)
+python3 --version
+# → Python 3.11.x ~ 3.13.x (3.14는 호환 불가)
+
+# 2. uv 설치 확인
+uv --version
+# → uv 0.x.x 이상
+# 미설치 시: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 3. Ollama 실행 확인
+curl -s http://localhost:11434/api/tags | head -1
+# → {"models":[...]} 응답이 와야 함
+# 미실행 시: ollama serve
+
+# 4. 모델 다운로드 확인
+ollama list | grep qwen3:8b
+# → qwen3:8b 보여야 함
+# 미다운로드 시: ollama pull qwen3:8b
+
+# 5. 의존성 사전 설치 (첫 실행 시 2~3분)
+cd src
+uv sync
+# → Resolved X packages 확인
+```
+
+## 주요 파일 경로
+
+```
+src/
+├── main.py              ← 진입점 (CLI 인자로 주제 입력)
+├── agents.py            ← 6명의 Agent 정의
+├── tasks.py             ← Agent별 Task 정의
+├── flow.py              ← 워크플로우 + 평가 루프
+├── pyproject.toml       ← 의존성 (crewai, litellm)
+└── output/
+    ├── report.md            ← 실행 결과 보고서
+    └── sample-report.md     ← 사전 생성 샘플
 ```
 
 ## 시연 순서

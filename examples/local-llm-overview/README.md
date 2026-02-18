@@ -6,15 +6,42 @@
 
 "로컬 LLM으로 무료 AI 코딩 에이전트 — 코드가 외부로 안 나가고, Copilot 비용도 없다"
 
-## 사전 요구사항
-
-- Ollama 설치 및 실행 중 (`ollama serve`)
-- Qwen2.5-Coder 7B 모델 다운로드 완료
-- OpenCode CLI 설치
+## 사전 체크리스트
 
 ```bash
-# 사전 준비 (시연 전 완료)
-ollama pull qwen2.5-coder:7b
+# 1. Ollama 실행 확인
+curl -s http://localhost:11434/api/tags | head -1
+# → {"models":[...]} 응답이 와야 함
+# 미실행 시: ollama serve
+
+# 2. 코딩 모델 다운로드 확인
+ollama list | grep qwen2.5-coder:7b
+# → qwen2.5-coder:7b 보여야 함
+# 미다운로드 시: ollama pull qwen2.5-coder:7b
+
+# 3. OpenCode 설치 확인
+opencode --version
+# → v1.2.x 이상
+# 미설치 시: go install github.com/opencode-ai/opencode@latest
+# 또는 brew install opencode-ai/tap/opencode
+
+# 4. OpenCode 설정 파일 확인
+cat src/sample-project/opencode.json
+# → provider: "ollama", model: "qwen2.5-coder:7b" 확인
+
+# 5. 샘플 프로젝트 확인
+ls src/sample-project/
+# → main.py  models.py  requirements.txt  opencode.json
+```
+
+## 주요 파일 경로
+
+```
+src/sample-project/
+├── main.py              ← FastAPI 도서 관리 API
+├── models.py            ← Pydantic 데이터 모델
+├── requirements.txt     ← Python 의존성
+└── opencode.json        ← OpenCode 설정 (Ollama 연결)
 ```
 
 ## 시연 순서

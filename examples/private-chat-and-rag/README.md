@@ -6,11 +6,47 @@
 
 "docker-compose 한 줄로 사내 ChatGPT를 구동하고, 사내 문서를 업로드하면 RAG로 답변한다"
 
-## 사전 요구사항
+## 사전 체크리스트
 
-- Docker Desktop 설치 및 실행 중
-- 최소 8GB RAM 여유
-- 인터넷 연결 (이미지 다운로드)
+```bash
+# 1. Docker Desktop 실행 확인
+docker info | head -3
+# → "Server:" 정보가 보여야 함
+# 미실행 시: Docker Desktop 앱 실행
+
+# 2. 메모리 확인 (최소 8GB 여유 필요)
+# Docker Desktop → Settings → Resources → Memory: 8GB 이상
+
+# 3. Ollama 실행 확인 (호스트 사용 시)
+curl -s http://localhost:11434/api/tags | head -1
+# → {"models":[...]} 응답이 와야 함
+# 미실행 시: ollama serve
+
+# 4. 모델 다운로드 확인
+ollama list | grep qwen3:8b
+# → qwen3:8b 보여야 함
+# 미다운로드 시: ollama pull qwen3:8b
+
+# 5. 포트 충돌 확인
+lsof -i :3000 | grep LISTEN
+# → 아무것도 안 나와야 함 (사용 중이면 해당 프로세스 종료)
+
+# 6. Docker 이미지 사전 다운로드 (첫 실행 시 5~10분)
+cd src
+docker compose pull openwebui
+# → Pull complete 확인
+```
+
+## 주요 파일 경로
+
+```
+src/
+├── docker-compose.yml          ← 서비스 정의 (OpenWebUI + Ollama)
+├── sample-docs/
+│   ├── company-travel-policy.md    ← RAG 테스트용 출장 규정
+│   └── company-ai-guidelines.md   ← RAG 테스트용 AI 사용 지침
+└── .gitignore
+```
 
 ## 시연 순서
 
