@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring AI Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }
+        header { background: #1a1a2e; color: #fff; padding: 1.5rem 2rem; }
+        header h1 { font-size: 1.4rem; font-weight: 600; }
+        header p { font-size: 0.85rem; color: #aaa; margin-top: 0.3rem; }
+        .container { max-width: 900px; margin: 1.5rem auto; padding: 0 1rem; }
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .tab { padding: 0.6rem 1.2rem; border: none; background: #e0e0e0; border-radius: 8px 8px 0 0;
+               cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
+        .tab.active { background: #fff; color: #1a1a2e; box-shadow: 0 -2px 4px rgba(0,0,0,0.05); }
+        .tab:hover { background: #d0d0d0; }
+        .tab.active:hover { background: #fff; }
+        .panel { display: none; background: #fff; border-radius: 0 8px 8px 8px; padding: 1.5rem;
+                 box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .panel.active { display: block; }
+        .input-group { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .input-group input, .input-group select { flex: 1; padding: 0.7rem; border: 1px solid #ddd;
+                 border-radius: 6px; font-size: 0.95rem; }
+        .input-group input:focus { outline: none; border-color: #4a6cf7; }
+        button.send { padding: 0.7rem 1.5rem; background: #4a6cf7; color: #fff; border: none;
+                      border-radius: 6px; cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: background 0.2s; }
+        button.send:hover { background: #3a5ce5; }
+        button.send:disabled { background: #aaa; cursor: not-allowed; }
+        .output { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 1rem;
+                  min-height: 120px; white-space: pre-wrap; word-break: break-word; font-size: 0.9rem; line-height: 1.6; }
+        .output.json { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem; }
+        .output .cursor { display: inline-block; width: 2px; height: 1em; background: #4a6cf7; animation: blink 0.8s infinite; vertical-align: text-bottom; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .label { font-size: 0.8rem; color: #888; margin-bottom: 0.4rem; }
+        .badge { display: inline-block; padding: 0.15rem 0.5rem; background: #e8f0fe; color: #1a73e8;
+                 border-radius: 4px; font-size: 0.75rem; font-weight: 500; margin-bottom: 1rem; }
+        .status { font-size: 0.8rem; color: #888; margin-top: 0.5rem; }
+        .status.error { color: #e53935; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+        /* 마크다운 렌더링 */
+        .output.md h1, .output.md h2, .output.md h3 { margin: 0.8rem 0 0.4rem; }
+        .output.md h1 { font-size: 1.2rem; } .output.md h2 { font-size: 1.1rem; } .output.md h3 { font-size: 1rem; }
+        .output.md p { margin: 0.4rem 0; }
+        .output.md ul, .output.md ol { margin: 0.4rem 0 0.4rem 1.5rem; }
+        .output.md code { background: #e9ecef; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.85em; }
+        .output.md pre { background: #2d2d2d; color: #f8f8f2; padding: 0.8rem; border-radius: 6px; overflow-x: auto; margin: 0.5rem 0; }
+        .output.md pre code { background: none; color: inherit; padding: 0; }
+        .output.md table { border-collapse: collapse; width: 100%; margin: 0.5rem 0; }
+        .output.md th, .output.md td { border: 1px solid #ddd; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.85rem; }
+        .output.md th { background: #f0f0f0; font-weight: 600; }
+        .output.md blockquote { border-left: 3px solid #4a6cf7; padding-left: 0.8rem; color: #666; margin: 0.5rem 0; }
+        .output.md strong { font-weight: 600; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Spring AI + Ollama Demo</h1>
+        <p>Java 코드 몇 줄로 AI 챗봇 — 모델을 바꿔도 코드는 그대로</p>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('chat')">Chat</button>
+            <button class="tab" onclick="showTab('stream')">Streaming</button>
+            <button class="tab" onclick="showTab('expert')">Prompt Lab</button>
+            <button class="tab" onclick="showTab('analyze')">Structured</button>
+            <button class="tab" onclick="showTab('sentiment')">Sentiment</button>
+        </div>
+
+        <!-- 기본 챗 -->
+        <div id="panel-chat" class="panel active">
+            <span class="badge">GET /chat</span>
+            <p class="label">ChatClient.prompt().user(message).call().content()</p>
+            <div class="input-group">
+                <input id="chat-input" placeholder="메시지를 입력하세요" value="인공지능이 뭔지 한 줄로 설명해줘">
+                <button class="send" onclick="doChat()">전송</button>
+            </div>
+            <div id="chat-output" class="output">응답이 여기에 표시됩니다.</div>
+            <div id="chat-status" class="status"></div>
+        </div>
+
+        <!-- 스트리밍 -->
+        <div id="panel-stream" class="panel">
+            <span class="badge">GET /chat/stream (SSE)</span>
+            <p class="label">ChatClient.prompt().user(message).stream().content()</p>
+            <div class="input-group">
+                <input id="stream-input" placeholder="메시지를 입력하세요" value="Spring AI를 한 문단으로 설명해줘">
+                <button class="send" onclick="doStream()">전송</button>
+            </div>
+            <div id="stream-output" class="output">실시간으로 토큰이 출력됩니다.</div>
+            <div id="stream-status" class="status"></div>
+        </div>
+
+        <!-- 프롬프트 Lab -->
+        <div id="panel-expert" class="panel">
+            <span class="badge">GET /chat/expert</span>
+            <p class="label">ChatClient.prompt().system(역할+대상+형식+말투).user(message).call().content()</p>
+            <datalist id="dl-role">
+                <option value="보안 전문가">
+                <option value="한식 전문가">
+                <option value="유치원 선생님">
+                <option value="Java 시니어 개발자">
+                <option value="스타트업 대표">
+                <option value="조선시대 선비">
+            </datalist>
+            <datalist id="dl-audience">
+                <option value="초등학생">
+                <option value="대학생">
+                <option value="현업 개발자">
+                <option value="CTO/경영진">
+            </datalist>
+            <datalist id="dl-format">
+                <option value="3줄 요약으로 작성하세요.">
+                <option value="마크다운 표로 정리하세요.">
+                <option value="비유를 사용해서 설명하세요.">
+                <option value="코드 예시를 포함해서 설명하세요.">
+                <option value="장점과 단점을 나눠서 비교하세요.">
+            </datalist>
+            <datalist id="dl-tone">
+                <option value="격식체(합쇼체)로 작성하세요.">
+                <option value="친근하고 캐주얼하게 말하세요.">
+                <option value="재치 있고 유머러스하게 말하세요.">
+                <option value="간결하고 단호하게 핵심만 말하세요.">
+            </datalist>
+            <div class="two-col">
+                <div>
+                    <div class="label" style="margin-top:0.5rem">역할 (role)</div>
+                    <input id="expert-role" list="dl-role" placeholder="선택 또는 직접 입력" value="보안 전문가" style="width:100%; padding:0.7rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem;">
+                </div>
+                <div>
+                    <div class="label" style="margin-top:0.5rem">대상 수준 (audience)</div>
+                    <input id="expert-audience" list="dl-audience" placeholder="선택 또는 직접 입력 (비워두면 생략)" style="width:100%; padding:0.7rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem;">
+                </div>
+            </div>
+            <div class="two-col" style="margin-top:0.5rem">
+                <div>
+                    <div class="label">출력 형식 (format)</div>
+                    <input id="expert-format" list="dl-format" placeholder="선택 또는 직접 입력 (비워두면 자유)" style="width:100%; padding:0.7rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem;">
+                </div>
+                <div>
+                    <div class="label">말투 (tone)</div>
+                    <input id="expert-tone" list="dl-tone" placeholder="선택 또는 직접 입력 (비워두면 기본)" style="width:100%; padding:0.7rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem;">
+                </div>
+            </div>
+            <div style="margin-top:0.8rem">
+                <div class="label">질문 (message)</div>
+                <input id="expert-input" placeholder="질문" value="SQL Injection이 뭐야?" style="width:100%; padding:0.7rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem;">
+            </div>
+            <div style="margin-top:0.8rem">
+                <button class="send" onclick="doExpert()">전송</button>
+            </div>
+            <div id="expert-output" class="output" style="margin-top:1rem">역할에 따라 답변 스타일이 달라집니다.</div>
+            <div id="expert-status" class="status"></div>
+        </div>
+
+        <!-- 구조화 출력 -->
+        <div id="panel-analyze" class="panel">
+            <span class="badge">GET /analyze</span>
+            <p class="label">ChatClient.prompt().user(message).call().entity(TechAnalysis.class)</p>
+            <div class="input-group">
+                <input id="analyze-input" placeholder="분석할 기술 주제" value="Spring AI">
+                <button class="send" onclick="doAnalyze()">분석</button>
+            </div>
+            <div id="analyze-output" class="output json">AI가 Java record(JSON)로 응답합니다.</div>
+            <div id="analyze-status" class="status"></div>
+        </div>
+
+        <!-- 감성 분석 -->
+        <div id="panel-sentiment" class="panel">
+            <span class="badge">GET /sentiment</span>
+            <p class="label">AI 텍스트 분석 → Java record → JSON → 시각화 (파싱 코드 없음)</p>
+            <div class="label" style="margin-top:0.5rem">리뷰 / 댓글 / 피드백 텍스트</div>
+            <textarea id="sentiment-input" rows="3" placeholder="분석할 텍스트를 입력하세요"
+                style="width:100%; padding:0.7rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; resize:vertical; font-family:inherit;">이 제품 정말 좋아요! 배송도 빠르고 포장도 꼼꼼했습니다. 다만 가격이 조금 비싼 느낌이에요.</textarea>
+            <div style="margin-top:0.5rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <button class="send" onclick="doSentiment()">분석</button>
+                <button class="send" style="background:#6c757d;" onclick="setSampleText(0)">긍정 예시</button>
+                <button class="send" style="background:#6c757d;" onclick="setSampleText(1)">부정 예시</button>
+                <button class="send" style="background:#6c757d;" onclick="setSampleText(2)">중립 예시</button>
+            </div>
+            <div id="sentiment-card" style="display:none; margin-top:1rem; background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px; padding:1.2rem;">
+                <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem;">
+                    <span id="sent-emoji" style="font-size:3rem;"></span>
+                    <div style="flex:1;">
+                        <div id="sent-label" style="font-size:1.1rem; font-weight:600;"></div>
+                        <div style="margin-top:0.4rem; background:#e9ecef; border-radius:99px; height:12px; overflow:hidden;">
+                            <div id="sent-bar" style="height:100%; border-radius:99px; transition:width 0.6s ease;"></div>
+                        </div>
+                        <div id="sent-score" style="font-size:0.8rem; color:#888; margin-top:0.2rem;"></div>
+                    </div>
+                </div>
+                <div id="sent-summary" style="font-size:0.95rem; margin-bottom:0.8rem; line-height:1.5;"></div>
+                <div id="sent-keywords" style="display:flex; gap:0.4rem; flex-wrap:wrap;"></div>
+            </div>
+            <div id="sentiment-raw" style="display:none; margin-top:0.8rem;">
+                <div class="label" style="cursor:pointer; color:#4a6cf7;" onclick="toggleRaw()">Raw JSON ▾</div>
+                <div id="sentiment-json" class="output json" style="display:none; margin-top:0.3rem; font-size:0.8rem;"></div>
+            </div>
+            <div id="sentiment-status" class="status"></div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('panel-' + name).classList.add('active');
+        }
+
+        function setStatus(id, text, isError) {
+            const el = document.getElementById(id);
+            el.textContent = text;
+            el.className = isError ? 'status error' : 'status';
+        }
+
+        function setLoading(btnEl, loading) {
+            btnEl.disabled = loading;
+            btnEl.textContent = loading ? '...' : (btnEl.dataset.label || '전송');
+        }
+
+        function renderMd(el, text) {
+            el.classList.add('md');
+            el.innerHTML = marked.parse(text);
+        }
+
+        // 기본 챗
+        async function doChat() {
+            const btn = event.target; btn.dataset.label = btn.textContent;
+            const msg = document.getElementById('chat-input').value;
+            const out = document.getElementById('chat-output');
+            out.textContent = ''; setLoading(btn, true); setStatus('chat-status', '요청 중...');
+            try {
+                const t0 = Date.now();
+                const res = await fetch('/chat?message=' + encodeURIComponent(msg));
+                if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+                renderMd(out, await res.text());
+                setStatus('chat-status', `완료 (${((Date.now() - t0) / 1000).toFixed(1)}초)`);
+            } catch (e) { out.textContent = ''; setStatus('chat-status', 'Error: ' + e.message, true); }
+            setLoading(btn, false);
+        }
+
+        // 스트리밍 — fetch + ReadableStream (SSE 공백 손실 방지)
+        async function doStream() {
+            const btn = event.target; btn.dataset.label = btn.textContent;
+            const msg = document.getElementById('stream-input').value;
+            const out = document.getElementById('stream-output');
+            out.textContent = ''; out.classList.remove('md');
+            setLoading(btn, true); setStatus('stream-status', '스트리밍 중...');
+            const t0 = Date.now();
+            let fullText = '';
+            try {
+                const res = await fetch('/chat/stream?message=' + encodeURIComponent(msg));
+                if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const parts = buffer.split('\n\n');
+                    buffer = parts.pop();
+                    for (const part of parts) {
+                        for (const line of part.split('\n')) {
+                            if (line.startsWith('data:')) {
+                                const token = line.substring(5);
+                                fullText += token;
+                                out.textContent = fullText;
+                            }
+                        }
+                    }
+                }
+                // 스트리밍 완료 후 마크다운 렌더링
+                renderMd(out, fullText);
+                setStatus('stream-status', `완료 (${((Date.now() - t0) / 1000).toFixed(1)}초)`);
+            } catch (e) { setStatus('stream-status', 'Error: ' + e.message, true); }
+            setLoading(btn, false);
+        }
+
+        // 프롬프트 Lab
+        async function doExpert() {
+            const btn = event.target; btn.dataset.label = btn.textContent;
+            const role = document.getElementById('expert-role').value;
+            const audience = document.getElementById('expert-audience').value;
+            const format = document.getElementById('expert-format').value;
+            const tone = document.getElementById('expert-tone').value;
+            const msg = document.getElementById('expert-input').value;
+            const out = document.getElementById('expert-output');
+            out.textContent = ''; setLoading(btn, true); setStatus('expert-status', '요청 중...');
+            try {
+                const t0 = Date.now();
+                const params = new URLSearchParams({ role, message: msg });
+                if (audience) params.set('audience', audience);
+                if (format) params.set('format', format);
+                if (tone) params.set('tone', tone);
+                const url = '/chat/expert?' + params.toString();
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+                renderMd(out, await res.text());
+                setStatus('expert-status', `완료 (${((Date.now() - t0) / 1000).toFixed(1)}초)`);
+            } catch (e) { out.textContent = ''; setStatus('expert-status', 'Error: ' + e.message, true); }
+            setLoading(btn, false);
+        }
+
+        // 구조화 출력
+        async function doAnalyze() {
+            const btn = event.target; btn.dataset.label = btn.textContent;
+            const topic = document.getElementById('analyze-input').value;
+            const out = document.getElementById('analyze-output');
+            out.textContent = ''; setLoading(btn, true); setStatus('analyze-status', '분석 중...');
+            try {
+                const t0 = Date.now();
+                const res = await fetch('/analyze?topic=' + encodeURIComponent(topic));
+                if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+                const json = await res.json();
+                out.textContent = JSON.stringify(json, null, 2);
+                setStatus('analyze-status', `완료 (${((Date.now() - t0) / 1000).toFixed(1)}초)`);
+            } catch (e) { out.textContent = ''; setStatus('analyze-status', 'Error: ' + e.message, true); }
+            setLoading(btn, false);
+        }
+
+        // 감성 분석
+        const sampleTexts = [
+            '이 서비스 최고예요! 직원분들도 친절하고, 음식도 맛있고, 분위기도 너무 좋았습니다. 꼭 다시 올게요!',
+            '최악의 경험이었습니다. 주문한 지 1시간이 지나도 안 오고, 문의하니까 불친절하기까지. 환불 요청했는데 아직도 처리가 안 됐네요.',
+            '배송은 예정대로 왔고 제품 상태도 괜찮습니다. 특별히 좋거나 나쁜 점은 없었습니다.'
+        ];
+        function setSampleText(idx) {
+            document.getElementById('sentiment-input').value = sampleTexts[idx];
+        }
+        function toggleRaw() {
+            const el = document.getElementById('sentiment-json');
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+        async function doSentiment() {
+            const btn = event.target; btn.dataset.label = btn.textContent;
+            const text = document.getElementById('sentiment-input').value;
+            const card = document.getElementById('sentiment-card');
+            const rawWrap = document.getElementById('sentiment-raw');
+            card.style.display = 'none'; rawWrap.style.display = 'none';
+            setLoading(btn, true); setStatus('sentiment-status', '분석 중...');
+            try {
+                const t0 = Date.now();
+                const res = await fetch('/sentiment?text=' + encodeURIComponent(text));
+                if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+                const data = await res.json();
+
+                // 시각화
+                const sentMap = {
+                    POSITIVE: { emoji: '😊', color: '#4caf50', label: '긍정' },
+                    NEUTRAL:  { emoji: '😐', color: '#ff9800', label: '중립' },
+                    NEGATIVE: { emoji: '😠', color: '#f44336', label: '부정' }
+                };
+                const s = sentMap[data.sentiment] || sentMap.NEUTRAL;
+
+                document.getElementById('sent-emoji').textContent = s.emoji;
+                document.getElementById('sent-label').textContent = s.label;
+                document.getElementById('sent-label').style.color = s.color;
+                document.getElementById('sent-bar').style.width = data.score + '%';
+                document.getElementById('sent-bar').style.background = s.color;
+                document.getElementById('sent-score').textContent = `감성 점수: ${data.score}/100`;
+                document.getElementById('sent-summary').textContent = data.summary || '';
+
+                const kwEl = document.getElementById('sent-keywords');
+                kwEl.innerHTML = '';
+                (data.keywords || []).forEach(kw => {
+                    const tag = document.createElement('span');
+                    tag.textContent = kw;
+                    tag.style.cssText = `display:inline-block; padding:0.2rem 0.6rem; background:${s.color}20; color:${s.color}; border:1px solid ${s.color}40; border-radius:99px; font-size:0.8rem; font-weight:500;`;
+                    kwEl.appendChild(tag);
+                });
+
+                card.style.display = 'block';
+                rawWrap.style.display = 'block';
+                document.getElementById('sentiment-json').textContent = JSON.stringify(data, null, 2);
+
+                setStatus('sentiment-status', `완료 (${((Date.now() - t0) / 1000).toFixed(1)}초)`);
+            } catch (e) { setStatus('sentiment-status', 'Error: ' + e.message, true); }
+            setLoading(btn, false);
+        }
+
+        // Enter key support
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey && el.tagName !== 'TEXTAREA') {
+                    const panel = el.closest('.panel');
+                    panel.querySelector('button.send').click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 시스템 프롬프트 — AI에게 역할(페르소나)을 부여합니다.
+ * 프롬프트 엔지니어링 Lab — 역할, 대상, 형식, 말투 조합으로 응답 변화를 확인합니다.
  *
- * 핵심: .system() 한 줄로 AI의 전문 분야와 답변 스타일을 지정.
+ * 핵심: .system() 하나로 AI의 전체 행동을 제어. 같은 질문도 프롬프트에 따라 완전히 다른 답변.
  */
 @RestController
 public class ExpertChatController {
@@ -19,16 +19,33 @@ public class ExpertChatController {
         this.chatClient = builder.build();
     }
 
-    // GET /chat/expert?role=보안 전문가&message=SQL Injection이 뭐야?
-    // curl -G "http://localhost:8081/chat/expert" \
-    //   --data-urlencode "role=보안 전문가" \
-    //   --data-urlencode "message=SQL Injection이 뭐야?"
     @GetMapping("/chat/expert")
     public String expert(
             @RequestParam(defaultValue = "Java 시니어 개발자") String role,
-            @RequestParam(defaultValue = "Spring AI의 장점을 알려줘") String message) {
+            @RequestParam(defaultValue = "Spring AI의 장점을 알려줘") String message,
+            @RequestParam(defaultValue = "") String audience,
+            @RequestParam(defaultValue = "") String format,
+            @RequestParam(defaultValue = "") String tone) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("""
+                당신은 '%s' 역할을 완벽히 연기합니다.
+                반드시 그 역할의 관점, 전문 용어, 말투, 비유를 사용하세요.
+                역할과 무관한 기술 용어는 절대 쓰지 마세요.
+                한국어로 답변하세요.""", role));
+
+        if (!audience.isEmpty()) {
+            sb.append(String.format("\n설명 대상은 '%s'입니다. 이 대상의 수준에 맞춰 난이도를 조절하세요.", audience));
+        }
+        if (!format.isEmpty()) {
+            sb.append(String.format("\n출력 형식: %s", format));
+        }
+        if (!tone.isEmpty()) {
+            sb.append(String.format("\n말투: %s", tone));
+        }
+
         return chatClient.prompt()
-                .system("당신은 " + role + "입니다. 전문적이면서도 이해하기 쉽게 한국어로 답변하세요.")
+                .system(sb.toString())
                 .user(message)
                 .call()
                 .content();
