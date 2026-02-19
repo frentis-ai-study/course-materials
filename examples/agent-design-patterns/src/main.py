@@ -10,6 +10,7 @@ CrewAI 멀티에이전트 시장 분석 보고서 — 평가 루프 포함 데�
 """
 
 import sys
+from pathlib import Path
 from flow import MarketReportFlow
 
 
@@ -26,7 +27,8 @@ def main():
     # 최종 보고서 저장
     report = flow.state.final_report
     if report:
-        output_path = "output/report.md"
+        output_path = Path("output/report.md")
+        output_path.parent.mkdir(exist_ok=True)
         with open(output_path, "w") as f:
             f.write(report)
         print(f"\n{'='*60}")
