@@ -3,7 +3,7 @@
 from crewai import Agent, LLM
 
 # Ollama 로컬 모델 (기본값)
-llm = LLM(model="ollama/gemma3:4b", base_url="http://localhost:11434")
+llm = LLM(model="ollama/qwen3:8b", base_url="http://localhost:11434")
 
 
 def create_planner() -> Agent:
