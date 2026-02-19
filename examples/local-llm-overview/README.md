@@ -25,13 +25,48 @@ opencode --version
 # 미설치 시: go install github.com/opencode-ai/opencode@latest
 # 또는 brew install opencode-ai/tap/opencode
 
-# 4. OpenCode 설정 파일 확인
-cat src/sample-project/opencode.json
-# → provider: "ollama", model: "qwen2.5-coder:7b" 확인
+# 4. OpenCode + Ollama 자동 설정 (권장, Ollama 0.15+)
+ollama launch opencode
+# → 모델 선택 + config 자동 생성 (인터랙티브)
+# 설정만 생성하고 바로 실행 안 하려면: ollama launch opencode --config
 
 # 5. 샘플 프로젝트 확인
 ls src/sample-project/
 # → main.py  models.py  requirements.txt  opencode.json
+```
+
+### Context Window 설정 (중요)
+
+Ollama 기본 context window는 4K이지만, OpenCode는 **16K 이상** (권장 64K)이 필요합니다.
+
+```bash
+ollama run qwen2.5-coder:7b
+>>> /set parameter num_ctx 16384
+>>> /save qwen2.5-coder-16k
+```
+
+### 수동 설정 (ollama launch 대신)
+
+`ollama launch opencode`가 안 될 경우 `opencode.json`을 직접 작성합니다.
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen2.5-coder:7b": {
+          "name": "qwen2.5-coder:7b"
+        }
+      }
+    }
+  }
+}
 ```
 
 ## 주요 파일 경로
@@ -109,3 +144,5 @@ cat README.md
 | Ollama 안 뜸 | `ollama serve` 재시작, 안 되면 `output/` 예시로 진행 |
 | 모델 응답 느림 | "실제 환경에서는 GPU가 있으면 훨씬 빠릅니다" |
 | OpenCode 에러 | `output/generated-readme.md` 보여주며 "이런 결과가 나옵니다" |
+| 모델 변경 안 됨 | `ollama launch opencode`로 재설정, 또는 OpenCode 완전 종료 후 재시작 |
+| 응답 잘림/불완전 | context window 4K 기본값 문제 → `num_ctx 16384` 설정 필요 |
