@@ -1,0 +1,88 @@
+<mxfile host="app.diagrams.net" agent="Claude" version="24.7.6">
+  <diagram id="local-llm-overview" name="OpenCode + Ollama">
+    <mxGraphModel dx="1100" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title" value="OpenCode + Ollama: 프라이빗 AI 코딩 에이전트" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="220" y="20" width="660" height="40" as="geometry" />
+        </mxCell>
+        <!-- Local Machine boundary -->
+        <mxCell id="local_boundary" value="로컬 머신" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#4fc3f7;dashed=1;dashPattern=8 4;fontSize=12;fontStyle=1;fontFamily=Pretendard;verticalAlign=top;spacingTop=5;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="140" y="80" width="820" height="370" as="geometry" />
+        </mxCell>
+        <!-- Developer -->
+        <mxCell id="developer" value="개발자" style="shape=mxgraph.basic.smiley;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="40" y="230" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- OpenCode TUI -->
+        <mxCell id="opencode" value="OpenCode (TUI)&#xa;터미널 AI 코딩 에이전트" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="220" width="180" height="60" as="geometry" />
+        </mxCell>
+        <!-- Ollama -->
+        <mxCell id="ollama" value="Ollama&#xa;(로컬 LLM 서버)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="480" y="220" width="150" height="60" as="geometry" />
+        </mxCell>
+        <!-- Model -->
+        <mxCell id="model" value="qwen2.5-coder:7b&#xa;(코딩 특화 모델)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="720" y="220" width="160" height="60" as="geometry" />
+        </mxCell>
+        <!-- Project Files -->
+        <mxCell id="project_files" value="프로젝트 파일&#xa;(소스코드, 설정 등)" style="shape=mxgraph.basic.document;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="240" y="120" width="120" height="70" as="geometry" />
+        </mxCell>
+        <!-- Generated Output -->
+        <mxCell id="output" value="생성 결과&#xa;README.md" style="shape=mxgraph.basic.document;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="240" y="340" width="120" height="70" as="geometry" />
+        </mxCell>
+        <!-- Arrows -->
+        <!-- Developer -> OpenCode -->
+        <mxCell id="e1" value="명령" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;fontFamily=Pretendard;" parent="1" source="developer" target="opencode" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- OpenCode -> Ollama -->
+        <mxCell id="e2" value="API 호출" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;fontFamily=Pretendard;" parent="1" source="opencode" target="ollama" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Ollama -> Model -->
+        <mxCell id="e3" value="추론" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;fontFamily=Pretendard;" parent="1" source="ollama" target="model" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Project Files -> OpenCode (reads) -->
+        <mxCell id="e4" value="파일 읽기" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#666666;dashed=1;fontSize=9;fontFamily=Pretendard;" parent="1" source="project_files" target="opencode" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- OpenCode -> Output -->
+        <mxCell id="e5" value="코드 생성" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;fontSize=9;fontFamily=Pretendard;" parent="1" source="opencode" target="output" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Cost Comparison Box -->
+        <mxCell id="cost_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Pretendard;arcSize=10;" parent="1" vertex="1">
+          <mxGeometry x="620" y="340" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="cost_title" value="비용 비교" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontStyle=1;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="730" y="345" width="70" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="cost_copilot" value="GitHub Copilot: $19/월" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="650" y="375" width="140" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="cost_opencode" value="OpenCode + Ollama: $0/월" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontFamily=Pretendard;rounded=1;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="640" y="405" width="160" height="25" as="geometry" />
+        </mxCell>
+        <!-- Security Note -->
+        <mxCell id="security" value="코드가 외부로 전송되지 않음 | 인터넷 연결 불필요" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontFamily=Pretendard;rounded=1;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="300" y="510" width="320" height="30" as="geometry" />
+        </mxCell>
+        <!-- Shield icon label -->
+        <mxCell id="shield" value="&#x1f512;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="270" y="505" width="35" height="35" as="geometry" />
+        </mxCell>
+        <!-- No Internet indicator -->
+        <mxCell id="no_internet" value="No Internet" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;fontSize=9;fontFamily=Pretendard;rounded=1;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="80" width="80" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

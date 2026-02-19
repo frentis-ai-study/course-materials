@@ -1,0 +1,176 @@
+<mxfile host="app.diagrams.net" agent="Claude" version="24.7.6">
+  <diagram id="spec-driven-dev-tools" name="OpenSpec 명세 기반 AI 코딩">
+    <mxGraphModel dx="1100" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title" value="OpenSpec: 명세 기반 AI 코딩 워크플로우" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="250" y="15" width="600" height="40" as="geometry" />
+        </mxCell>
+        <!-- LEFT PANEL: 기존 방식 -->
+        <mxCell id="left_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;fontSize=10;fontFamily=Pretendard;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="70" width="460" height="490" as="geometry" />
+        </mxCell>
+        <mxCell id="left_title" value="기존 방식: 채팅 기반" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="170" y="80" width="180" height="30" as="geometry" />
+        </mxCell>
+        <!-- Chat step 1 -->
+        <mxCell id="chat1" value="채팅: &quot;로그인 기능 만들어줘&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="100" y="130" width="200" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ce1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;fontSize=9;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="165" as="sourcePoint" />
+            <mxPoint x="200" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Code step 1 -->
+        <mxCell id="code1" value="코드 생성 (v1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="120" y="190" width="160" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ce2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;fontSize=9;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="225" as="sourcePoint" />
+            <mxPoint x="200" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Chat step 2 -->
+        <mxCell id="chat2" value="채팅: &quot;아니, DB 연동도 해줘&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="100" y="250" width="200" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ce3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;fontSize=9;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="285" as="sourcePoint" />
+            <mxPoint x="200" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Code step 2 -->
+        <mxCell id="code2" value="코드 재생성 (v2, 이전 코드 무시)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="80" y="310" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="ce4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;fontSize=9;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="345" as="sourcePoint" />
+            <mxPoint x="200" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Chat step 3 -->
+        <mxCell id="chat3" value="채팅: &quot;에러 고쳐줘...&quot; (반복)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="100" y="370" width="200" height="35" as="geometry" />
+        </mxCell>
+        <!-- Problems -->
+        <mxCell id="problems" value="문제점" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontStyle=1;fontColor=#b85450;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="340" y="140" width="60" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="prob1" value="컨텍스트 유실" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="330" y="170" width="100" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="prob2" value="코드 일관성 부족" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="330" y="200" width="110" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="prob3" value="반복 수정 피로" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="330" y="230" width="100" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="prob4" value="구조 설계 부재" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="330" y="260" width="100" height="25" as="geometry" />
+        </mxCell>
+        <!-- Sad result -->
+        <mxCell id="sad" value="결과: 시간 낭비 + 품질 저하" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontFamily=Pretendard;rounded=1;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="110" y="430" width="200" height="30" as="geometry" />
+        </mxCell>
+        <!-- VS Divider -->
+        <mxCell id="vs" value="VS" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=24;fontStyle=1;fontColor=#999999;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="510" y="280" width="50" height="40" as="geometry" />
+        </mxCell>
+        <!-- RIGHT PANEL: OpenSpec -->
+        <mxCell id="right_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#4fc3f7;fontSize=10;fontFamily=Pretendard;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="570" y="70" width="490" height="490" as="geometry" />
+        </mxCell>
+        <mxCell id="right_title" value="OpenSpec: 명세 기반" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="720" y="80" width="170" height="30" as="geometry" />
+        </mxCell>
+        <!-- Step 1: /opsx:new -->
+        <mxCell id="step1" value="/opsx:new&#xa;(프로젝트 초기화)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="620" y="125" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="re1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="165" as="sourcePoint" />
+            <mxPoint x="690" y="195" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Generated docs 1 -->
+        <mxCell id="doc1" value="proposal.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="620" y="195" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="doc2" value="specs/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="730" y="195" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="re2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="225" as="sourcePoint" />
+            <mxPoint x="690" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Step 2: design + tasks -->
+        <mxCell id="doc3" value="design.md&#xa;(아키텍처 설계)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="610" y="260" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="doc4" value="tasks.md&#xa;(구현 태스크)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="745" y="260" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="re3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="300" as="sourcePoint" />
+            <mxPoint x="690" y="335" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Step 3: /opsx:apply -->
+        <mxCell id="step3" value="/opsx:apply&#xa;(코드 생성 실행)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="620" y="335" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="re4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="375" as="sourcePoint" />
+            <mxPoint x="690" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Code Generation -->
+        <mxCell id="codegen" value="코드 생성&#xa;(명세 기반, 일관된 구조)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="600" y="410" width="180" height="45" as="geometry" />
+        </mxCell>
+        <!-- Benefits -->
+        <mxCell id="benefits_title" value="장점" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontStyle=1;fontColor=#82b366;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="870" y="130" width="40" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="ben1" value="컨텍스트 보존" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="850" y="160" width="100" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="ben2" value="코드 일관성 확보" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="850" y="190" width="110" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="ben3" value="설계 먼저, 구현 나중" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="850" y="220" width="130" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="ben4" value="재현 가능한 프로세스" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="850" y="250" width="130" height="25" as="geometry" />
+        </mxCell>
+        <!-- Happy result -->
+        <mxCell id="happy" value="결과: 체계적 개발 + 높은 품질" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontFamily=Pretendard;rounded=1;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="600" y="475" width="220" height="30" as="geometry" />
+        </mxCell>
+        <!-- Flow arrow labels -->
+        <mxCell id="arrow_label1" value="자동 생성" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9;fontColor=#666666;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="700" y="170" width="60" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow_label2" value="구조 설계" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9;fontColor=#666666;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="700" y="235" width="60" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow_label3" value="명세 기반 실행" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9;fontColor=#666666;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="700" y="305" width="90" height="25" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

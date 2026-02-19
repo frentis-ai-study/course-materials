@@ -1,0 +1,136 @@
+<mxfile host="app.diagrams.net" agent="Claude" version="24.7.6">
+  <diagram id="agent-service-demo" name="Agent vs 챗봇">
+    <mxGraphModel dx="1100" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title" value="Agent vs 챗봇: 자율성과 도구 활용의 차이" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="250" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+        <!-- LEFT PANEL: 챗봇 -->
+        <mxCell id="left_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;fontSize=10;fontFamily=Pretendard;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="80" width="480" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="left_title" value="챗봇 (ChatGPT)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="180" y="95" width="200" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="left_subtitle" value="단순 질의-응답" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#999999;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="220" y="125" width="100" height="25" as="geometry" />
+        </mxCell>
+        <!-- Chatbot User -->
+        <mxCell id="chat_user" value="사용자" style="shape=mxgraph.basic.smiley;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="230" y="170" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="chat_user_label" value="&quot;다음 주 화요일 팀 회의&#xa;잡아줘&quot;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9;fontFamily=Pretendard;fontStyle=2;" parent="1" vertex="1">
+          <mxGeometry x="200" y="235" width="130" height="40" as="geometry" />
+        </mxCell>
+        <!-- Chatbot Arrow down -->
+        <mxCell id="chat_e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;fontFamily=Pretendard;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="260" y="280" as="sourcePoint" />
+            <mxPoint x="260" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- LLM -->
+        <mxCell id="chat_llm" value="LLM&#xa;(텍스트 생성만)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="195" y="320" width="130" height="50" as="geometry" />
+        </mxCell>
+        <!-- Chatbot Arrow down -->
+        <mxCell id="chat_e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;fontFamily=Pretendard;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="260" y="370" as="sourcePoint" />
+            <mxPoint x="260" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Response -->
+        <mxCell id="chat_response" value="응답 (텍스트만)&#xa;&quot;화요일에 회의를 잡으시려면&#xa;캘린더에서 직접 설정하세요&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=9;fontFamily=Pretendard;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="165" y="410" width="190" height="60" as="geometry" />
+        </mxCell>
+        <!-- Limitation note -->
+        <mxCell id="chat_limit" value="도구 사용 불가 | 실행 불가 | 텍스트 응답만 가능" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="115" y="490" width="290" height="30" as="geometry" />
+        </mxCell>
+        <!-- VS Divider -->
+        <mxCell id="vs" value="VS" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=24;fontStyle=1;fontColor=#999999;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="520" y="280" width="50" height="40" as="geometry" />
+        </mxCell>
+        <!-- RIGHT PANEL: Agent -->
+        <mxCell id="right_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#4fc3f7;fontSize=10;fontFamily=Pretendard;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="580" y="80" width="480" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="right_title" value="Agent (OpenClaw)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="720" y="95" width="200" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="right_subtitle" value="자율 계획 + 도구 실행" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#999999;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="740" y="125" width="130" height="25" as="geometry" />
+        </mxCell>
+        <!-- Agent User -->
+        <mxCell id="agent_user" value="사용자" style="shape=mxgraph.basic.smiley;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="790" y="160" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="agent_user_label" value="&quot;다음 주 화요일 팀 회의&#xa;잡아줘&quot;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9;fontFamily=Pretendard;fontStyle=2;" parent="1" vertex="1">
+          <mxGeometry x="755" y="225" width="130" height="40" as="geometry" />
+        </mxCell>
+        <!-- Arrow to Agent Plan -->
+        <mxCell id="agent_e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;fontFamily=Pretendard;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="270" as="sourcePoint" />
+            <mxPoint x="820" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Agent Plan -->
+        <mxCell id="agent_plan" value="Agent 계획 수립&#xa;(작업 분해 + 순서 결정)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="730" y="300" width="180" height="45" as="geometry" />
+        </mxCell>
+        <!-- Arrow to tools -->
+        <mxCell id="agent_e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;fontFamily=Pretendard;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="345" as="sourcePoint" />
+            <mxPoint x="820" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tools_label" value="도구 자율 실행" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9;fontColor=#666666;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="830" y="355" width="90" height="25" as="geometry" />
+        </mxCell>
+        <!-- Tool 1: 일정 확인 -->
+        <mxCell id="tool1" value="일정 확인" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="640" y="380" width="100" height="40" as="geometry" />
+        </mxCell>
+        <!-- Tool 2: 회의실 예약 -->
+        <mxCell id="tool2" value="회의실 예약" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="770" y="380" width="100" height="40" as="geometry" />
+        </mxCell>
+        <!-- Tool 3: 초대 메일 -->
+        <mxCell id="tool3" value="초대 메일" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;fontSize=10;fontFamily=Pretendard;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="900" y="380" width="100" height="40" as="geometry" />
+        </mxCell>
+        <!-- Arrows from plan to tools -->
+        <mxCell id="agent_e3a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#60a917;fontSize=9;fontFamily=Pretendard;" parent="1" source="agent_plan" target="tool1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="agent_e3b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#60a917;fontSize=9;fontFamily=Pretendard;" parent="1" source="agent_plan" target="tool2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="agent_e3c" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#60a917;fontSize=9;fontFamily=Pretendard;" parent="1" source="agent_plan" target="tool3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Arrow to completion -->
+        <mxCell id="agent_e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;fontSize=9;fontFamily=Pretendard;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="420" as="sourcePoint" />
+            <mxPoint x="820" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Completion -->
+        <mxCell id="agent_done" value="완료 알림&#xa;&quot;화요일 오후 2시 회의실 A에&#xa;팀 회의를 잡고, 초대 메일을&#xa;발송했습니다&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontFamily=Pretendard;" parent="1" vertex="1">
+          <mxGeometry x="720" y="460" width="200" height="65" as="geometry" />
+        </mxCell>
+        <!-- Benefit note -->
+        <mxCell id="agent_benefit" value="자율 판단 | 도구 실행 | 멀티스텝 완수" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontFamily=Pretendard;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="680" y="535" width="220" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
