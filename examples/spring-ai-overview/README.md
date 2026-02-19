@@ -1,6 +1,6 @@
 # 데모: Spring AI + Ollama 챗
 
-> LO: `LO-Spring AI 개요` | 예상 시간: 3분
+> LO: `LO-Spring AI 개요` | 예상 시간: 5분
 
 ## 시연 목표
 
@@ -45,16 +45,30 @@ cd src/spring-ai-chat
 ```
 src/spring-ai-chat/
 ├── src/main/java/com/frentis/demo/
-│   ├── ChatController.java          ← 핵심 코드 (4줄)
+│   ├── ChatController.java          ← 기본 챗 (4줄)
+│   ├── StreamChatController.java    ← 스트리밍 SSE (실시간 출력)
+│   ├── StructuredController.java    ← 구조화 출력 (JSON 자동 매핑)
+│   ├── ExpertChatController.java    ← 시스템 프롬프트 (페르소나)
 │   └── SpringAiChatApplication.java
 ├── src/main/resources/
 │   └── application.yml              ← 모델 설정 (여기서 모델명 변경)
 ├── src/test/java/com/frentis/demo/
-│   ├── SpringAiChatApplicationTests.java  ← 단위 테스트
+│   ├── SpringAiChatApplicationTests.java  ← ChatController 단위 테스트
+│   ├── ExpertChatControllerTest.java      ← ExpertChat 단위 테스트
+│   ├── StructuredControllerTest.java      ← Structured 단위 테스트
 │   └── ChatIntegrationTest.java           ← 통합 테스트 (Ollama 필요)
 ├── pom.xml
 └── mvnw / mvnw.cmd
 ```
+
+## API 엔드포인트
+
+| 엔드포인트 | 설명 | 핵심 Spring AI 기능 |
+|-----------|------|-------------------|
+| `GET /chat?message=` | 기본 챗 | `.call().content()` |
+| `GET /chat/stream?message=` | 실시간 스트리밍 (SSE) | `.stream().content()` |
+| `GET /chat/expert?role=&message=` | 페르소나 설정 | `.system()` |
+| `GET /analyze?topic=` | JSON 구조화 출력 | `.entity(Record.class)` |
 
 ## 시연 순서
 
@@ -104,7 +118,36 @@ curl -G "http://localhost:8081/chat" --data-urlencode "message=인공지능이 �
 - 응답 확인
 - "지금 Ollama의 Qwen3 8B가 로컬에서 답변했습니다. 외부 서버 아닙니다"
 
-### Step 3: 모델 교체 — 벤더 독립성 (1분)
+### Step 3: 스트리밍 — ChatGPT처럼 실시간 출력 (30초)
+
+```bash
+curl -N "http://localhost:8081/chat/stream?message=Spring+AI를+한+문단으로+설명해줘"
+```
+
+- 토큰이 하나씩 실시간으로 출력됨
+- "ChatGPT처럼 글자가 타이핑되듯 나옵니다. `.stream()` 한 줄 차이입니다"
+
+### Step 4: 구조화 출력 — AI가 JSON 객체를 반환 (30초)
+
+```bash
+curl -s "http://localhost:8081/analyze?topic=Spring+AI" | python3 -m json.tool
+```
+
+- AI가 `{topic, summary, score, pros, cons}` JSON으로 응답
+- "AI 응답을 Java record로 자동 매핑합니다. JSON 파싱 코드 없음"
+
+### Step 5: 시스템 프롬프트 — AI에게 역할 부여 (30초)
+
+```bash
+curl -G "http://localhost:8081/chat/expert" \
+  --data-urlencode "role=보안 전문가" \
+  --data-urlencode "message=SQL Injection이 뭐야?"
+```
+
+- 같은 질문이라도 역할에 따라 답변 스타일이 달라짐
+- "`.system()` 한 줄로 AI의 전문 분야를 지정합니다"
+
+### Step 6: 모델 교체 — 벤더 독립성 (1분)
 
 앱 종료 후 `application.yml` 수정:
 
@@ -134,6 +177,7 @@ curl -G "http://localhost:8081/chat" --data-urlencode "message=인공지능이 �
 ## 핵심 멘트
 
 - "AI 챗봇 전체 코드가 4줄입니다"
+- "스트리밍, 구조화 출력, 페르소나까지 — 각각 코드 1~2줄 추가"
 - "모델 교체는 설정 1줄 — 코드 변경 없음"
 - "기존 Spring Boot 프로젝트에 의존성 하나 추가하면 AI가 됩니다"
 - "교육과정에서 여기서부터 RAG, Tool Calling, MCP Agent까지 확장합니다"
@@ -145,12 +189,11 @@ cd src/spring-ai-chat
 
 # 단위 테스트 (Ollama 없이도 통과)
 ./mvnw test
-# → Tests run: 4, Failures: 0 (통합 2개는 Skipped)
+# → Tests run: 10, Failures: 0 (통합 4개는 Skipped)
 
 # 통합 테스트 (Ollama 실행 중일 때)
 OLLAMA_AVAILABLE=true ./mvnw test
-# → Tests run: 4, Failures: 0, Skipped: 0
-# → 약 25초 소요 (Ollama 응답 생성 시간 포함)
+# → Tests run: 10, Failures: 0, Skipped: 0
 ```
 
 ## 백업 플랜

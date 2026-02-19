@@ -37,4 +37,20 @@ class ChatIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.emptyString())));
     }
+
+    @Test
+    void expertEndpointWithRole() throws Exception {
+        mockMvc.perform(get("/chat/expert")
+                        .param("role", "Java 개발자")
+                        .param("message", "record가 뭐야?"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.emptyString())));
+    }
+
+    @Test
+    void analyzeReturnsJson() throws Exception {
+        mockMvc.perform(get("/analyze").param("topic", "Java"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("topic")));
+    }
 }
